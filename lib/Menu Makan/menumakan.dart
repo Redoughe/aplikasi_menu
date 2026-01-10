@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => CartProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 /* ================================
@@ -14,13 +20,7 @@ class AppColors {
   static const Color minumanHeader = Color.fromARGB(255, 68, 144, 137);
   static const Color sideDishHeader = Color.fromARGB(255, 28, 113, 123);
 
-  static const Color tabActive = Colors.white;
-  static const Color tabInactive = Colors.white70;
-
-  static const Color card = Colors.white;
   static const Color harga = Color(0xFFFF8C00);
-  static const Color buttonBorder = Color(0xFFFF8C00);
-  static const Color counterIcon = Color(0xFFFF8C00);
 }
 
 /* ================================
@@ -31,7 +31,7 @@ class MenuItem {
   final int harga;
   final String imagePath;
 
-  MenuItem({
+  const MenuItem({
     required this.nama,
     required this.harga,
     required this.imagePath,
@@ -39,60 +39,86 @@ class MenuItem {
 }
 
 /* ================================
-   DATA MENU (EDIT DI SINI)
+   CART PROVIDER
 ================================ */
-final List<MenuItem> makananMenu = [
-  MenuItem(
+class CartProvider extends ChangeNotifier {
+  final Map<MenuItem, int> _items = {};
+
+  int quantity(MenuItem item) => _items[item] ?? 0;
+
+  int get totalItem =>
+      _items.values.fold(0, (sum, qty) => sum + qty);
+
+  void add(MenuItem item) {
+    _items[item] = (_items[item] ?? 0) + 1;
+    notifyListeners();
+  }
+
+  void remove(MenuItem item) {
+    if (!_items.containsKey(item)) return;
+
+    if (_items[item]! > 1) {
+      _items[item] = _items[item]! - 1;
+    } else {
+      _items.remove(item);
+    }
+    notifyListeners();
+  }
+}
+
+/* ================================
+   DATA MENU
+================================ */
+final makananMenu = [
+  const MenuItem(
     nama: 'Mie Kuah Daging',
     harga: 15000,
-    imagePath: 'assets/images/mie_kuah_daging.jpg',
+    imagePath: 'images/mie kuah daging.png',
   ),
-  MenuItem(
+  const MenuItem(
     nama: 'Mie Kuah Kacang',
     harga: 14000,
-    imagePath: 'assets/images/mie_kuah_kacang.jpeg',
+    imagePath: 'images/mie kuah kacang.png',
   ),
-  MenuItem(
+  const MenuItem(
     nama: 'Mie Tek',
     harga: 16000,
-    imagePath: 'assets/images/mie_tek.webp',
+    imagePath: 'images/mie tek.png',
   ),
-  MenuItem(
+  const MenuItem(
     nama: 'Mie Topping Seafood',
     harga: 18000,
-    imagePath: 'assets/images/mie_topping_seafood.jpg',
+    imagePath: 'images/mie topping seafood.png',
   ),
-  MenuItem(
+  const MenuItem(
     nama: 'Nasi',
-    harga: 6000,
-    imagePath: 'assets/images/nasi.jpg',
+    harga: 5000,
+    imagePath: 'images/Nasi.png',
   ),
-  MenuItem(
+  const MenuItem(
     nama: 'Nasi Jeruk',
-    harga: 7000,
-    imagePath: 'assets/images/nasi_jeruk.jpg',
+    harga: 8000,
+    imagePath: 'images/nasi jeruk.png',
   ),
 ];
 
-final List<MenuItem> sideDishMenu = [
-  MenuItem(
+final sideDishMenu = [
+  const MenuItem(
     nama: 'Cireng',
     harga: 5000,
-    imagePath: 'assets/images/cireng.jpg',
+    imagePath: 'images/cireng.png',
   ),
-  MenuItem(
+  const MenuItem(
     nama: 'Sosis',
     harga: 6000,
-    imagePath: 'assets/images/sosis.jpg',
+    imagePath: 'images/sosis.png',
   ),
-  MenuItem(
+  const MenuItem(
     nama: 'Tahu',
     harga: 5000,
-    imagePath: 'assets/images/tahu.jpg',
+    imagePath: 'images/tahu.png',
   ),
 ];
-
-final List<MenuItem> minumanMenu = []; // KOSONG
 
 /* ================================
    APP ROOT
@@ -135,28 +161,48 @@ class _MenuPageState extends State<MenuPage>
 
     _tabController.addListener(() {
       setState(() {
-        if (_tabController.index == 0) {
-          headerColor = AppColors.makananHeader;
-        } else if (_tabController.index == 1) {
-          headerColor = AppColors.minumanHeader;
-        } else {
-          headerColor = AppColors.sideDishHeader;
-        }
+        headerColor = switch (_tabController.index) {
+          0 => AppColors.makananHeader,
+          1 => AppColors.minumanHeader,
+          _ => AppColors.sideDishHeader,
+        };
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final totalItem = context.watch<CartProvider>().totalItem;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: headerColor,
         title: const Text('Menu'),
+        actions: [
+          Stack(
+            alignment: Alignment.topRight,
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(12),
+                child: Icon(Icons.shopping_cart),
+              ),
+              if (totalItem > 0)
+                CircleAvatar(
+                  radius: 8,
+                  backgroundColor: Colors.red,
+                  child: Text(
+                    totalItem.toString(),
+                    style: const TextStyle(
+                      fontSize: 10,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ],
         bottom: TabBar(
           controller: _tabController,
-          indicatorColor: AppColors.tabActive,
-          labelColor: AppColors.tabActive,
-          unselectedLabelColor: AppColors.tabInactive,
           tabs: const [
             Tab(text: 'Makanan'),
             Tab(text: 'Minuman'),
@@ -168,7 +214,7 @@ class _MenuPageState extends State<MenuPage>
         controller: _tabController,
         children: [
           MenuGrid(menuList: makananMenu),
-          MenuGrid(menuList: minumanMenu),
+          const Center(child: Text('Belum ada menu')),
           MenuGrid(menuList: sideDishMenu),
         ],
       ),
@@ -186,28 +232,17 @@ class MenuGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (menuList.isEmpty) {
-      return const Center(
-        child: Text(
-          'Belum ada menu',
-          style: TextStyle(color: Colors.grey),
-        ),
-      );
-    }
-
     return Padding(
       padding: const EdgeInsets.all(12),
       child: GridView.builder(
         itemCount: menuList.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          crossAxisSpacing: 12,
           mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
           childAspectRatio: 0.75,
         ),
-        itemBuilder: (context, index) {
-          return MenuCard(item: menuList[index]);
-        },
+        itemBuilder: (_, i) => MenuCard(item: menuList[i]),
       ),
     );
   }
@@ -216,99 +251,78 @@ class MenuGrid extends StatelessWidget {
 /* ================================
    CARD MENU
 ================================ */
-class MenuCard extends StatefulWidget {
+class MenuCard extends StatelessWidget {
   final MenuItem item;
 
   const MenuCard({super.key, required this.item});
 
   @override
-  State<MenuCard> createState() => _MenuCardState();
-}
-
-class _MenuCardState extends State<MenuCard> {
-  int jumlah = 0;
-
-  @override
   Widget build(BuildContext context) {
+    final cart = context.watch<CartProvider>();
+    final jumlah = cart.quantity(item);
+
     return Card(
-      color: AppColors.card,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       elevation: 3,
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+            child: AspectRatio(
+              aspectRatio: 1 / 1,
               child: Image.asset(
-                widget.item.imagePath,
-                height: 100,
-                width: double.infinity,
+                item.imagePath,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => const Center(
-                  child: Text(
-                    'Gambar tidak ditemukan',
-                    style: TextStyle(color: Colors.red),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(item.nama,
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 4),
+                Text(
+                  'Rp ${item.harga}',
+                  style: const TextStyle(
+                    color: AppColors.harga,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              widget.item.nama,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'Rp ${widget.item.harga}',
-              style: const TextStyle(
-                color: AppColors.harga,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const Spacer(),
-            jumlah == 0
-                ? SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        side:
-                            const BorderSide(color: AppColors.buttonBorder),
-                      ),
-                      onPressed: () => setState(() => jumlah = 1),
-                      child: const Text('Tambah'),
-                    ),
-                  )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                        icon: const Icon(
-                          Icons.remove_circle_outline,
-                          color: AppColors.counterIcon,
+                const SizedBox(height: 8),
+                jumlah == 0
+                    ? SizedBox(
+                        width: double.infinity,
+                        child: OutlinedButton(
+                          onPressed: () => cart.add(item),
+                          child: const Text('Tambah'),
                         ),
-                        onPressed: () =>
-                            setState(() => jumlah = jumlah > 0 ? jumlah - 1 : 0),
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.remove_circle_outline),
+                            onPressed: () => cart.remove(item),
+                          ),
+                          Text(
+                            jumlah.toString(),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.add_circle_outline),
+                            onPressed: () => cart.add(item),
+                          ),
+                        ],
                       ),
-                      Text(
-                        jumlah.toString(),
-                        style:
-                            const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      IconButton(
-                        icon: const Icon(
-                          Icons.add_circle_outline,
-                          color: AppColors.counterIcon,
-                        ),
-                        onPressed: () => setState(() => jumlah++),
-                      ),
-                    ],
-                  ),
-          ],
-        ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
