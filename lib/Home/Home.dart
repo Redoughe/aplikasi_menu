@@ -130,7 +130,7 @@ class HomePage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const FoodAppWeb(),
+                            builder: (_) => const MenuMinumanPage(),
                           ),
                         );
                       },
