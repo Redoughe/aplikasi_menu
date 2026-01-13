@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 
 import '../Home/home.dart';
 import 'Menu Makan/menumakan.dart'; // hanya untuk tipe
-import '../providers/cart_provider.dart' hide CartProvider;
 
 void main() {
   runApp(
