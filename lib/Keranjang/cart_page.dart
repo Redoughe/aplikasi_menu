@@ -12,8 +12,8 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   final List<Product> cartItems = [
     Product(name: "mie gacor", price: 50000, quantity: 0),
-    Product(name: "setrup", price: 75000, quantity: 0),
-    Product(name: "kapal karam", price: 75000, quantity: 0),
+    Product(name: "mie tek", price: 75000, quantity: 0),
+    Product(name: "cireng", price: 75000, quantity: 0),
   ];
 
   int getTotal() {
@@ -35,9 +35,8 @@ class _CartPageState extends State<CartPage> {
         cartItems[index].quantity--;
       }
 
-      // jika quantity 0 → hapus item (mirip Shopee)
       if (cartItems[index].quantity == 0) {
-        cartItems.removeAt(index); 
+        cartItems.removeAt(index);
       }
     });
   }
@@ -46,12 +45,19 @@ class _CartPageState extends State<CartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Keranjang",
-        style: TextStyle(fontWeight:FontWeight.bold),),
-        backgroundColor: Color.fromARGB(255, 243, 171, 38)
+        leading: IconButton( // 🔹 TOMBOL BACK
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: const Text(
+          "Keranjang",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: const Color(0xFFF3AB26),
       ),
 
-      // ===== LIST PRODUK =====
       body: cartItems.isEmpty
           ? const Center(
               child: Text(
@@ -65,13 +71,12 @@ class _CartPageState extends State<CartPage> {
               itemBuilder: (context, index) {
                 final item = cartItems[index];
                 return Card(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: 10, vertical: 6),
                   child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: Row(
                       children: [
-                        // ===== GAMBAR (DUMMY) =====
                         Container(
                           width: 60,
                           height: 60,
@@ -82,8 +87,6 @@ class _CartPageState extends State<CartPage> {
                           child: const Icon(Icons.shopping_bag),
                         ),
                         const SizedBox(width: 10),
-
-                        // ===== NAMA & HARGA =====
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,12 +107,11 @@ class _CartPageState extends State<CartPage> {
                             ],
                           ),
                         ),
-
-                        // ===== BUTTON QTY =====
                         Row(
                           children: [
                             IconButton(
-                              icon: const Icon(Icons.remove_circle_outline),
+                              icon:
+                                  const Icon(Icons.remove_circle_outline),
                               onPressed: () => kurangQty(index),
                             ),
                             Text(
@@ -129,7 +131,6 @@ class _CartPageState extends State<CartPage> {
               },
             ),
 
-      // ===== CHECKOUT BOTTOM BAR (SHOPEE STYLE) =====
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
@@ -154,16 +155,16 @@ class _CartPageState extends State<CartPage> {
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
                   ),
                 ),
               ],
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor:Color.fromARGB(255, 243, 171, 38),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                backgroundColor:
+                    const Color(0xFFF3AB26),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 30, vertical: 12),
               ),
               onPressed: getTotal() == 0
                   ? null
@@ -171,7 +172,8 @@ class _CartPageState extends State<CartPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => QrisPage(total: getTotal()),
+                          builder: (_) =>
+                              QrisPage(total: getTotal()),
                         ),
                       );
                     },
