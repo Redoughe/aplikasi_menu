@@ -102,7 +102,7 @@ class KeranjangScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text('Checkout'),
+              child: const Text('Next'),
             ),
           ],
         ),

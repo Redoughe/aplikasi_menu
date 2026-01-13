@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-// import halaman yang SUDAH ADA
 import '../Menu Makan/menumakan.dart';
 import '../Menu Minum/menuminum.dart';
+import '../Kritik & Saran/krisar.dart';
+import '../Profil/profil.dart';
+import '../Keranjang/cart_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Food & Drink App',
+      title: 'Mie Cuan',
       theme: ThemeData(
         useMaterial3: true,
         fontFamily: 'Poppins',
@@ -24,37 +26,48 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
-      body: SafeArea(
+
+      /* ================= HEADER ================= */
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFFF8C00),
+        title: const Text(
+          'Mie Cuan',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.shopping_cart, color: Colors.white),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const CartPage()),
+              );
+            },
+          ),
+        ],
+      ),
+
+      body: _currentIndex == 0
+    ? SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
-              // LOCATION
-              const Text(
-                "Location",
-                style: TextStyle(color: Colors.grey),
-              ),
-              const SizedBox(height: 4),
-              const Text(
-                "Blitzen, Tanjungbalai",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              // SEARCH BAR
               TextField(
                 decoration: InputDecoration(
                   hintText: "Search menu",
@@ -70,7 +83,6 @@ class HomePage extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // PROMO BANNER
               Container(
                 height: 140,
                 width: double.infinity,
@@ -83,10 +95,7 @@ class HomePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      "Promo",
-                      style: TextStyle(color: Colors.white70),
-                    ),
+                    Text("Promo Hari Ini!", style: TextStyle(color: Colors.white70)),
                     SizedBox(height: 8),
                     Text(
                       "Buy one get\none FREE",
@@ -102,7 +111,6 @@ class HomePage extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              // MENU BUTTONS
               Row(
                 children: [
                   Expanded(
@@ -113,9 +121,7 @@ class HomePage extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (_) => const MenuPage(),
-                          ),
+                          MaterialPageRoute(builder: (_) => const MenuPage()),
                         );
                       },
                     ),
@@ -138,9 +144,45 @@ class HomePage extends StatelessWidget {
                   ),
                 ],
               ),
+
+              const SizedBox(height: 16),
+
+              _menuButton(
+                context,
+                title: "Review",
+                icon: Icons.rate_review,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const ReviewScreen(),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),
+      )
+    : const ProfilePage(),
+
+      /* ================= BOTTOM NAVBAR ================= */
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        selectedItemColor: const Color(0xFFFF8C00),
+        onTap: (index) {
+          setState(() => _currentIndex = index);
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profil',
+          ),
+        ],
       ),
     );
   }
@@ -165,12 +207,7 @@ class HomePage extends StatelessWidget {
           children: [
             Icon(icon, size: 40, color: const Color(0xFFFF8C00)),
             const SizedBox(height: 8),
-            Text(
-              title,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
           ],
         ),
       ),

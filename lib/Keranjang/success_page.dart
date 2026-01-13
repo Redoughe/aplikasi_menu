@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kelompok_aplikasi_menu/Pesanan/pesanan1.dart';
 
 class SuccessPage extends StatelessWidget {
   const SuccessPage({super.key});
@@ -42,7 +43,10 @@ class SuccessPage extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  Navigator.popUntil(context, (route) => route.isFirst);
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (_) => const KeranjangScreen()),
+                  );
                 },
                 child: const Text(
                   "Proses Pesanan",

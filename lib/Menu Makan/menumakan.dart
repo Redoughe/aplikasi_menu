@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../Keranjang/cart_page.dart';
 
 /* ================================
    KONFIGURASI WARNA
@@ -168,28 +169,43 @@ class _MenuPageState extends State<MenuPage>
         backgroundColor: headerColor,
         title: const Text('Menu'),
         actions: [
-          Stack(
-            alignment: Alignment.topRight,
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(12),
-                child: Icon(Icons.shopping_cart),
-              ),
-              if (totalItem > 0)
-                CircleAvatar(
-                  radius: 8,
-                  backgroundColor: Colors.red,
-                  child: Text(
-                    totalItem.toString(),
-                    style: const TextStyle(
-                      fontSize: 10,
-                      color: Colors.white,
-                    ),
-                  ),
+  InkWell(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const CartPage()),
+      );
+    },
+    child: Stack(
+      alignment: Alignment.topRight,
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(12),
+          child: Icon(Icons.shopping_cart, color: Colors.white),
+        ),
+        if (context.watch<CartProvider>().totalItem > 0)
+          Positioned(
+            right: 6,
+            top: 6,
+            child: CircleAvatar(
+              radius: 8,
+              backgroundColor: Colors.red,
+              child: Text(
+                context.watch<CartProvider>().totalItem.toString(),
+                style: const TextStyle(
+                  fontSize: 10,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
                 ),
-            ],
+              ),
+            ),
           ),
-        ],
+      ],
+    ),
+  ),
+],
+
+
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
