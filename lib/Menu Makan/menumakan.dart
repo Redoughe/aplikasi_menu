@@ -8,7 +8,6 @@ class AppColors {
   static const Color background = Color(0xFFF7F7F7);
 
   static const Color makananHeader = Color(0xFFFF8C00);
-  static const Color minumanHeader = Color.fromARGB(255, 68, 144, 137);
   static const Color sideDishHeader = Color.fromARGB(255, 28, 113, 123);
 
   static const Color harga = Color(0xFFFF8C00);
@@ -154,7 +153,6 @@ class _MenuPageState extends State<MenuPage>
       setState(() {
         headerColor = switch (_tabController.index) {
           0 => AppColors.makananHeader,
-          1 => AppColors.minumanHeader,
           _ => AppColors.sideDishHeader,
         };
       });
@@ -196,7 +194,6 @@ class _MenuPageState extends State<MenuPage>
           controller: _tabController,
           tabs: const [
             Tab(text: 'Makanan'),
-            Tab(text: 'Minuman'),
             Tab(text: 'Side Dish'),
           ],
         ),
