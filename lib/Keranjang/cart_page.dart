@@ -48,7 +48,7 @@ class _CartPageState extends State<CartPage> {
       appBar: AppBar(
         title: const Text("Keranjang",
         style: TextStyle(fontWeight:FontWeight.bold),),
-        backgroundColor: Colors.greenAccent,
+        backgroundColor: Color.fromARGB(255, 243, 171, 38)
       ),
 
       // ===== LIST PRODUK =====
@@ -98,7 +98,7 @@ class _CartPageState extends State<CartPage> {
                               Text(
                                 "Rp ${item.price}",
                                 style: const TextStyle(
-                                    color: Colors.greenAccent,
+                                    color: Colors.black,
                                     fontWeight: FontWeight.bold),
                               ),
                             ],
@@ -154,14 +154,14 @@ class _CartPageState extends State<CartPage> {
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.greenAccent,
+                    color: Colors.black,
                   ),
                 ),
               ],
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.greenAccent,
+                backgroundColor:Color.fromARGB(255, 243, 171, 38),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
               ),

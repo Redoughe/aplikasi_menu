@@ -20,7 +20,7 @@ class QrisPage extends StatelessWidget {
               style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: Colors.greenAccent),
+                  color: Colors.black)
             ),
             const SizedBox(height: 20),
             Image.asset(
