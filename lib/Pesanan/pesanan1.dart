@@ -43,6 +43,12 @@ class KeranjangScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+      leading: IconButton(
+      icon: const Icon(Icons.arrow_back),
+      onPressed: () {
+      Navigator.pop(context); // 🔙 kembali ke halaman sebelumnya
+    },
+  ),
         title: const Text('Pesanan Saya'),
         backgroundColor: const Color.fromARGB(255, 243, 171, 38),
         foregroundColor: Colors.white,
