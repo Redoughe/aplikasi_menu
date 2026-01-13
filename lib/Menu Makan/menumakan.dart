@@ -1,15 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main() {
-  runApp(
-    ChangeNotifierProvider(
-      create: (_) => CartProvider(),
-      child: const MyApp(),
-    ),
-  );
-}
-
 /* ================================
    KONFIGURASI WARNA
 ================================ */
@@ -277,51 +268,65 @@ class MenuCard extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(item.nama,
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 4),
-                Text(
-                  'Rp ${item.harga}',
-                  style: const TextStyle(
-                    color: AppColors.harga,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                jumlah == 0
-                    ? SizedBox(
-                        width: double.infinity,
-                        child: OutlinedButton(
-                          onPressed: () => cart.add(item),
-                          child: const Text('Tambah'),
-                        ),
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.remove_circle_outline),
-                            onPressed: () => cart.remove(item),
-                          ),
-                          Text(
-                            jumlah.toString(),
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.add_circle_outline),
-                            onPressed: () => cart.add(item),
-                          ),
-                        ],
-                      ),
-              ],
-            ),
+         Expanded(
+  child: Padding(
+    padding: const EdgeInsets.all(8),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          item.nama,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+        const SizedBox(height: 4),
+        Text(
+          'Rp ${item.harga}',
+          style: const TextStyle(
+            color: AppColors.harga,
+            fontWeight: FontWeight.w600,
           ),
+        ),
+        const Spacer(),
+         SizedBox(
+  height: 40, // KUNCI TINGGI → mencegah overflow
+  child: jumlah == 0
+      ? SizedBox(
+          width: double.infinity,
+          child: OutlinedButton(
+            onPressed: () => cart.add(item),
+            child: const Text('Tambah'),
+          ),
+        )
+      : Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+              icon: const Icon(Icons.remove_circle_outline),
+              onPressed: () => cart.remove(item),
+            ),
+            Text(
+              jumlah.toString(),
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            IconButton(
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+              icon: const Icon(Icons.add_circle_outline),
+              onPressed: () => cart.add(item),
+            ),
+          ],
+        ),
+)
+
+      ],
+    ),
+  ),
+),
+
         ],
       ),
     );
