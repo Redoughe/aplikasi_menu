@@ -11,9 +11,9 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   final List<Product> cartItems = [
-    Product(name: "mie gacor", price: 50000, quantity: 0),
-    Product(name: "mie tek", price: 75000, quantity: 0),
-    Product(name: "cireng", price: 75000, quantity: 0),
+    Product(name: "Nasi Jeruk", price: 8000, quantity: 0),
+    Product(name: "mie tek", price: 16000, quantity: 0),
+    Product(name: "cireng", price: 5000, quantity: 0),
   ];
 
   int getTotal() {
