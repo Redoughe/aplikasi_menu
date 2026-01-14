@@ -62,11 +62,6 @@ class CartProvider extends ChangeNotifier {
 ================================ */
 final makananMenu = [
   const MenuItem(
-    nama: 'Mie Kuah Daging',
-    harga: 15000,
-    imagePath: 'images/mie kuah daging.png',
-  ),
-  const MenuItem(
     nama: 'Mie Kuah Kacang',
     harga: 14000,
     imagePath: 'images/mie kuah kacang.png',
@@ -75,11 +70,6 @@ final makananMenu = [
     nama: 'Mie Tek',
     harga: 16000,
     imagePath: 'images/mie tek.png',
-  ),
-  const MenuItem(
-    nama: 'Mie Topping Seafood',
-    harga: 18000,
-    imagePath: 'images/mie topping seafood.png',
   ),
   const MenuItem(
     nama: 'Nasi',
