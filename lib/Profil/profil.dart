@@ -62,7 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   leading: const Icon(Icons.star, color: Color(0xFFFF8C00)),
                   title: const Text("POIN MEMBER"),
                   subtitle: const Text(
-                    "1200 Poin",
+                    "9999 Poin",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   trailing: const Icon(Icons.chevron_right),
@@ -74,12 +74,6 @@ class _ProfilePageState extends State<ProfilePage> {
             const SizedBox(height: 16),
 
             /// ===== MENU =====
-            _menuItem(
-              icon: Icons.receipt_long,
-              title: "Transaksi",
-              onTap: () {},
-            ),
-
             _menuItem(
               icon: Icons.person_outline,
               title: "Akun",
