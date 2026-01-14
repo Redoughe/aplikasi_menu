@@ -27,8 +27,9 @@ class KeranjangScreen extends StatelessWidget {
   const KeranjangScreen({super.key});
 
   final List<Map<String, dynamic>> cartItems = const [
-    {'nama': 'Mi Ayam', 'harga': 12000, 'jumlah': 2},
-    {'nama': 'Es Teh', 'harga': 5000, 'jumlah': 1},
+    {'nama': 'Nasi Jeruk', 'harga': 8000, 'jumlah': 2},
+    {'nama': 'Mie tek', 'harga': 16000, 'jumlah': 1},
+    {'nama': 'Cireng', 'harga': 5000, 'jumlah': 1},
   ];
 
   int getTotalHarga() {
